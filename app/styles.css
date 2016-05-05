@@ -1,0 +1,63 @@
+:root{
+    --photobooth-countdown: transform 800ms ease-out;
+}
+/**
+ * holds the video object and all it's assets
+ */
+#video-container{
+    display: block;
+    position: relative;
+    width: var(--photbooth-camera-width);
+    height: var(--photbooth-camera-height);
+    text-align: center;
+}
+/**
+ * Contains the countdown
+ */
+#countdown-container{
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #fff;
+    font-family: sans-serif;
+}
+/**
+ * off state for countdown
+ */
+#countdown-container.hidden{
+    display: none;
+}
+#countdown-display{
+    margin: 0px;
+    font-size: 200px;
+    line-height: 1px;
+    position: relative;
+    left: -50px;
+    transition: var(--photobooth-countdown);
+    -moz-transition: var(--photobooth-countdown);
+    -webkit-transition: var(--photobooth-countdown);
+}
+#countdown-display.countdown{
+    transform: scaleX(0) scaleY(0);
+}
+/**
+ * Camera flash default state to transition from/to
+ */
+#camera-flash{
+    opacity: 0;
+    top: 0;
+    background: #fff;
+    position:absolute;
+    width: var(--photbooth-camera-width);
+    height: var(--photbooth-camera-height);
+    transition: var(--photbooth-camera-flash);
+    -moz-transition: var(--photbooth-camera-flash);
+    -webkit-transition: var(--photbooth-camera-flash);
+}
+/**
+ * Show the camera flash so css can animate it
+ */
+#camera-flash.display{
+    opacity: 1;
+}
