@@ -6,11 +6,11 @@ Best practices lib for photobooth.
  - render screenshots to canvas in memory
  - countdown timer optimized performance
  - easy to configure from config.js
- - - Set video dimensions (automatically changes flash point)
- - - Set countdown from timer
- - - Enable or disable the countdown for demo purposes
- - - Set the "shutter" speed (flash when picture is taken)
- - - Set rear or front facing camera
+ -- Set video dimensions (automatically changes flash point)
+ -- Set countdown from timer
+ -- Enable or disable the countdown for demo purposes
+ -- Set the "shutter" speed (flash when picture is taken)
+ -- Set rear or front facing camera
 
 ### Dev/testing
 

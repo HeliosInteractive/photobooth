@@ -189,6 +189,42 @@
     return canvas;
   };
 
+  function process(func){
+    //Get the pixel values
+    var pix = this.ctx.getImageData(0, 0, this.width, this.height);
+
+    //Loop through the pixels
+    for (var x = 0; x < this.width; x++) {
+      for (var y = 0; y < this.height; y++) {
+        var i = (y * this.width + x) * 4;
+        var r = pix.data[i],
+            g = pix.data[i + 1],
+            b = pix.data[i + 2],
+            a = pix.data[i + 3];
+        var ret = func(r, g, b, a, x, y);
+        pix.data[i] = ret[0];
+        pix.data[i + 1] = ret[1];
+        pix.data[i + 2] = ret[2];
+        pix.data[i + 3] = ret[3];
+      }
+    }
+
+    //Put the image back to the canvas
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.ctx.putImageData(pix, 0, 0);
+    return this;
+  }
+
+  video.whiteBalance = function(temp) {
+    var color = this.colorTempToRGB(temp);
+    return this.process(function(r, g, b, a) {
+      var nr = r * (255 / color.r);
+      var ng = g * (255 / color.g);
+      var nb = b * (255 / color.b);
+      return [nr, ng, nb, a];
+    });
+  }
+
   exports.video = video;
 
 })(exports || {});
