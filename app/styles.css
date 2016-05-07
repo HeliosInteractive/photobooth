@@ -29,8 +29,9 @@
     display: none;
 }
 #countdown-display{
+    opacity: 0;
     margin: 0px;
-    font-size: 200px;
+    font-size: 300px;
     line-height: 1px;
     position: relative;
     left: -50px;
@@ -39,6 +40,7 @@
     -webkit-transition: var(--photobooth-countdown);
 }
 #countdown-display.countdown{
+    opacity: 1;
     transform: scaleX(0) scaleY(0);
 }
 /**

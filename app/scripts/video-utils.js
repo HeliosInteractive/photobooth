@@ -40,13 +40,13 @@
     throw new Error('create html element #video-container to use photobooth');
 
   var countdown = createCountdown();
-  var countdownDisplay = createObjId('h1', 'countdown-display');
+  //var countdownDisplay = createObjId('h1', 'countdown-display');
   var flash = createObjId('div', 'camera-flash');
 
   // put it all in the dom
   container.appendChild(createVideo());
   container.appendChild(flash);
-  countdown.appendChild(countdownDisplay);
+  //countdown.appendChild(countdownDisplay);
   container.appendChild(countdown);
 
   /**
@@ -104,7 +104,7 @@
   };
 
   /**
-   * Recursive countdown function
+   * Countdown function to setup and start countdown timer
    * @param {Number} from countdown from this number
    * @param {function} change broadcast each time the from changes
    * @param {callback} done broadcast when the countdown is over
@@ -112,11 +112,6 @@
    */
   video.countdown = function(from, change, done){
 
-    if( from === 0 ){
-      countdown.className = 'hidden';
-      change(from);
-      return done();
-    }
     if( typeof from === 'function'){
       change = function(){};
       done = from;
@@ -127,21 +122,62 @@
       change = function(){};
     }
 
-    countdown.removeChild(countdownDisplay);
-    countdownDisplay = createObjId('h1', 'countdown-display');
-    countdown.appendChild(countdownDisplay);
-    setTimeout(function(){
-      countdownDisplay.className = 'countdown time-'+from;
-    }, 30);
-    countdownDisplay.innerHTML = from;
-    change(from);
     countdown.removeAttribute('class');
+    var count = buildNumbers(from);
+    // force the browser to paint the first number.
+    var firstn = count[count.length-1];
+    firstn.style.transform = 'scaleX(1) scaleY(1)';
+    setTimeout(function(){firstn.style.transform = ''},1);
 
-    return setTimeout(function(){
-      video.countdown(--from, change, done);
-    }, 1000);
+    timer(count, from, change, done);
   };
+  /**
+   * Build the count display
+   * @returns {Array}
+   */
+  function buildNumbers(from){
+    var count = [];
+    for( let i = 1; i < from + 1; i++){
+      var display = createObjId('h1', 'countdown-display');
+      countdown.appendChild(display);
+      display.innerHTML = i;
+      count.push(display);
+    }
+    return count;
+  }
+  /**
+   * Recursive countdown function
+   * @param {Array} domnumbers the actual dom elements for countdown
+   * @param {Number} from countdown from this number
+   * @param {function} change broadcast each time the from changes
+   * @param {callback} done broadcast when the countdown is over
+   * @returns {*}
+   */
+  function timer(domnumbers, from, change, done){
 
+    if( from === 0 ){
+      domnumbers.className = 'hidden';
+      change(from);
+      while (countdown.firstChild) {
+        countdown.removeChild(countdown.firstChild);
+      }
+      return done();
+    }
+
+    var countdownDisplay = domnumbers.pop();
+    countdownDisplay.className = 'countdown time-'+from;
+    change(from);
+    return setTimeout(function(){
+      timer(domnumbers, --from, change, done);
+    }, 1000);
+  }
+
+  /**
+   * Takes a snapshot (single frame) from canvas
+   * @param v
+   * @param pause
+   * @returns {Element}
+   */
   video.snapshot = function(v, pause){
 
     var canvas = document.createElement('canvas');
